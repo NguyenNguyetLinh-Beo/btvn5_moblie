@@ -25,3 +25,5 @@
 BƯỚC 10: TẠO FLASK API
 <img width="250" height="200" alt="image" src="https://github.com/user-attachments/assets/8119ce86-24cf-48fd-b225-1d69901edce5" />
 <img width="889" height="453" alt="Gemini_Generated_Image_776c72776c72776c" src="https://github.com/user-attachments/assets/b395e4d5-cd7b-47ef-84ac-c1e40816562c" />
+<img width="1630" height="821" alt="image" src="https://github.com/user-attachments/assets/f68ef089-a248-4366-9917-3ff75d1ddd19" />
+<img width="1908" height="893" alt="image" src="https://github.com/user-attachments/assets/98ac5950-eea7-4d78-b1da-5c66a9ddab82" />
