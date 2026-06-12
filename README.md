@@ -1,4 +1,71 @@
-# btvn5_moblie
+# BÀI TẬP 5 - HỌC PHẦN PHÁT TRIỂN ỨNG DỤNG MÃ NGUỒN MỞ
+# NGUYỄN NGUYỆT LINH - K225480106039
+
+# PHẦN I: LÝ THUYẾT
+
+## 1. Khái niệm Docker là gì?
+<img width="300" height="168" alt="image" src="https://github.com/user-attachments/assets/b3044680-db52-44b4-a798-7c9ff69d50f4" />
+
+Docker là một nền tảng mã nguồn mở cho phép tự động đóng gói ứng dụng và tất cả các thành phần phụ thuộc của nó (thư viện, môi trường, cấu hình...) vào trong một đơn vị ảo hóa độc lập gọi là **Container**. 
+* **Khác biệt cốt lõi:** Khác với máy ảo truyền thống (VMware, VirtualBox) phải chạy kèm cả một hệ điều hành khách (Guest OS) nặng nề, Docker Container chia sẻ chung nhân hệ điều hành (Kernel) của máy Host. Nhờ đó, Container khởi động chỉ trong vài giây, cực kỳ nhẹ và tiêu tốn rất ít tài nguyên phần cứng (RAM/CPU).
+
+---
+
+## 2. Các từ khóa (Keywords) trong tệp `docker-compose.yml`
+
+| Từ khóa | Ý nghĩa cấu trúc | Ví dụ minh họa |
+| :--- | :--- | :--- |
+| **`version`** | Định nghĩa phiên bản cấu hình của Docker Compose được sử dụng để đảm bảo tính tương thích với Docker Engine. | `version: '3.8'` |
+| **`services`** | Khối khai báo gốc, bắt đầu danh sách các container dịch vụ sẽ được cấu hình và khởi tạo trong hệ thống. | `services:`<br>`  mariadb:` |
+| **`image`** | Chỉ định tên và phiên bản bản vá (tag) của Docker Image mẫu tải từ Docker Hub để dựng container. | `image: influxdb:1.8` |
+| **`container_name`** | Thiết lập tên cố định cho container khi chạy, giúp quản lý, kiểm tra logs và debug dễ dàng. | `container_name: app_nodered` |
+| **`ports`** | Ánh xạ cổng dịch vụ công khai theo cú pháp: `Cổng_Máy_Host:Cổng_Trong_Container`. | `ports:`<br>`  - "80:80"` |
+| **`environment`** | Thiết lập các biến môi trường cấu hình động bên trong container (như tài khoản, mật khẩu, tên DB...). | `environment:`<br>`  MYSQL_ROOT_PASSWORD: rootpassword` |
+| **`volumes`** | Gắn vùng lưu trữ dữ liệu bền vững (từ thư mục máy host hoặc volume độc lập) vào bên trong container. | `volumes:`<br>`  - ./init.sql:/docker-entrypoint-initdb.d/init.sql` |
+| **`networks`** | Định nghĩa mạng nội bộ cô lập để các container tham gia kết nối và giao tiếp trực tiếp với nhau bằng tên service. | `networks:`<br>`  - monitor_net` |
+| **`depends_on`** | Thiết lập thứ tự ràng buộc khởi động, ép container này phải đợi container phụ thuộc sẵn sàng trước. | `depends_on:`<br>`  - mariadb` |
+| **`command`** | Ghi đè câu lệnh thực thi mặc định bên trong container khi hệ thống bắt đầu khởi tạo (startup). | `command: sh -c "python app.py"` |
+| **`restart`** | Cấu hình chính sách tự động khởi động lại container nếu nó gặp lỗi sập hoặc crash đột ngột. | `restart: always` |
+
+---
+
+## 3. Ưu điểm khi triển khai ứng dụng sử dụng Docker
+* **Tính nhất quán môi trường (Write Once, Run Anywhere):** Loại bỏ triệt để lỗi *"Chạy trên máy cá nhân mượt mà nhưng lên máy chủ bị lỗi môi trường"*. Container đóng gói cô lập hoàn toàn.
+* **Tối ưu hóa tài nguyên phần cứng:** Khởi động siêu tốc trong vài giây, chiếm dụng dung lượng ổ cứng và bộ nhớ RAM cực ít so với ảo hóa máy ảo VM thông thường.
+* **Triển khai và mở rộng tự động:** Quản lý toàn bộ hạ tầng phức tạp bao gồm nhiều lớp dịch vụ chỉ thông qua một tệp cấu hình mã nguồn duy nhất, dễ dàng nhân bản và nâng cấp.
+
+---
+
+## 4. Các bước triển khai ứng dụng lên Máy chủ thật KHÔNG CÓ INTERNET (Offline)
+* **Bước 1 (Chuẩn bị trên máy mạng):** Xây dựng, cấu hình các tệp mã nguồn và chạy thử nghiệm hệ thống hoàn chỉnh bằng Docker Compose trên máy tính cá nhân có kết nối Internet ổn định.
+* **Bước 2 (Xuất đóng gói dữ liệu):** Sử dụng câu lệnh `docker save` để nén toàn bộ các cấu trúc Docker Images cần dùng thành các tệp tin lưu trữ offline có định dạng đuôi `.tar`.
+* **Bước 3 (Di chuyển tài nguyên):** Sử dụng các thiết bị ngoại vi độc lập (USB, ổ cứng di động, mạng LAN nội bộ cô lập) để sao chép toàn bộ các tệp `.tar` này cùng với thư mục mã nguồn dự án (chứa file `docker-compose.yml`, code web, code API) sang máy chủ thật.
+* **Bước 4 (Kích hoạt tại máy chủ Offline):** Tại máy chủ thật (đã được cài sẵn Docker Engine offline), sử dụng câu lệnh `docker load` để nạp các tệp `.tar` vào kho quản lý image cục bộ, sau đó khởi chạy hệ thống bằng lệnh `docker compose up -d` mà hoàn toàn không cần chạm vào Internet.
+
+# PHẦN II: QUY TRÌNH THỰC HIỆN ỨNG DỤNG MONITOR & ALERT DATA REAL-TIME
+
+Hệ thống tiến hành giám sát luồng dữ liệu **Giá Bitcoin biến động liên tục từ nguồn thực tế**. Hệ thống sở hữu cơ chế lưu trữ song song (MariaDB lưu tức thời, InfluxDB lưu lịch sử), trực quan hóa biểu đồ (Grafana), phân phối giao diện đích (Nginx làm Webserver + Flask làm API) và tự động gửi cảnh báo vượt ngưỡng an toàn về nhóm Telegram gồm 3 thành viên.
+
+---
+
+## Bước 1: Chuẩn bị cấu trúc thư mục dự án và các tệp mã nguồn
+
+Di chuyển vào thư mục dự án `~/ma` (Monitor - Alert) và thiết lập cấu trúc cây thư mục tĩnh như sau:
+
+```text
+~/ma/
+├── docker-compose.yml
+├── init.sql
+├── flask-api/
+│   ├── app.py
+│   └── requirements.txt
+└── nginx/
+    ├── default.conf
+    └── web/
+        └── index.html
+```
+Các lệnh tạo nhanh file và thư mục: 
+
 ## BƯỚC 1: TẠO THƯ MỤC DỰ ÁN
 <img width="719" height="418" alt="image" src="https://github.com/user-attachments/assets/36a211c9-e2f5-4148-8aa6-c447ba5936f1" />
 ## 
