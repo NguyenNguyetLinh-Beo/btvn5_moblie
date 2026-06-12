@@ -19,21 +19,41 @@ Docker là một nền tảng mã nguồn mở cho phép tự động đóng gó
 | **`services`** | Khối khai báo gốc, bắt đầu danh sách các container dịch vụ sẽ được cấu hình và khởi tạo trong hệ thống. | `services:`<br>`  mariadb:` |
 | **`image`** | Chỉ định tên và phiên bản bản vá (tag) của Docker Image mẫu tải từ Docker Hub để dựng container. | `image: influxdb:1.8` |
 | **`container_name`** | Thiết lập tên cố định cho container khi chạy, giúp quản lý, kiểm tra logs và debug dễ dàng. | `container_name: app_nodered` |
-| **`ports`** | Ánh xạ cổng dịch vụ công khai theo cú pháp: `Cổng_Máy_Host:Cổng_Trong_Container`. | `ports:`<br>`  - "80:80"` |
-| **`environment`** | Thiết lập các biến môi trường cấu hình động bên trong container (như tài khoản, mật khẩu, tên DB...). | `environment:`<br>`  MYSQL_ROOT_PASSWORD: rootpassword` |
+| **`ports`** | Ánh xạ cổng dịch vụ công khai theo cú pháp: `Cổng_Máy_Host:Cổng_Trong_Container`. | `ports:`<br>`  - "8080:80"` |
+| **`environment`** | Thiết lập các biến môi trường cấu hình động bên trong container (như tài khoản, mật khẩu, tên DB...). | `environment:  MYSQL_ROOT_PASSWORD: root` |
 | **`volumes`** | Gắn vùng lưu trữ dữ liệu bền vững (từ thư mục máy host hoặc volume độc lập) vào bên trong container. | `volumes:`<br>`  - ./init.sql:/docker-entrypoint-initdb.d/init.sql` |
 | **`networks`** | Định nghĩa mạng nội bộ cô lập để các container tham gia kết nối và giao tiếp trực tiếp với nhau bằng tên service. | `networks:`<br>`  - monitor_net` |
 | **`depends_on`** | Thiết lập thứ tự ràng buộc khởi động, ép container này phải đợi container phụ thuộc sẵn sàng trước. | `depends_on:`<br>`  - mariadb` |
-| **`command`** | Ghi đè câu lệnh thực thi mặc định bên trong container khi hệ thống bắt đầu khởi tạo (startup). | `command: sh -c "python app.py"` |
+| **`command`** | Ghi đè câu lệnh thực thi mặc định bên trong container khi hệ thống bắt đầu khởi tạo (startup). | `command:  "python app.py"` |
 | **`restart`** | Cấu hình chính sách tự động khởi động lại container nếu nó gặp lỗi sập hoặc crash đột ngột. | `restart: always` |
 
 ---
 
-## 3. Ưu điểm khi triển khai ứng dụng sử dụng Docker
-* **Tính nhất quán môi trường (Write Once, Run Anywhere):** Loại bỏ triệt để lỗi *"Chạy trên máy cá nhân mượt mà nhưng lên máy chủ bị lỗi môi trường"*. Container đóng gói cô lập hoàn toàn.
-* **Tối ưu hóa tài nguyên phần cứng:** Khởi động siêu tốc trong vài giây, chiếm dụng dung lượng ổ cứng và bộ nhớ RAM cực ít so với ảo hóa máy ảo VM thông thường.
-* **Triển khai và mở rộng tự động:** Quản lý toàn bộ hạ tầng phức tạp bao gồm nhiều lớp dịch vụ chỉ thông qua một tệp cấu hình mã nguồn duy nhất, dễ dàng nhân bản và nâng cấp.
+## 3. Ưu điểm khi triển khai ứng dụng bằng Docker
 
+*  Việc sử dụng Docker trong triển khai ứng dụng mang lại nhiều lợi ích quan trọng:
+
+✔ 1. Đồng nhất môi trường triển khai
+
+*  Ứng dụng chạy giống nhau trên mọi môi trường (máy cá nhân, server, cloud), hạn chế lỗi “chạy được trên máy tôi nhưng không chạy trên máy khác”.
+
+✔ 2. Tối ưu tài nguyên hệ thống
+
+*  Container nhẹ hơn nhiều so với máy ảo, không cần chạy hệ điều hành riêng, giúp tiết kiệm RAM và CPU.
+
+ ✔ 3. Triển khai nhanh và linh hoạt
+
+* Toàn bộ hệ thống có thể được khởi chạy chỉ bằng một câu lệnh:
+
+docker compose up -d  
+
+✔ 4. Dễ dàng mở rộng hệ thống
+
+* Có thể nhân bản service nhanh chóng để mở rộng theo nhu cầu thực tế (scaling).
+
+✔ 5. Dễ quản lý và bảo trì
+
+* Toàn bộ kiến trúc hệ thống được mô tả bằng file cấu hình duy nhất (docker-compose.yml), giúp dễ theo dõi và chỉnh sửa.
 ---
 
 ## 4. Các bước triển khai ứng dụng lên Máy chủ thật KHÔNG CÓ INTERNET (Offline)
@@ -94,3 +114,7 @@ BƯỚC 10: TẠO FLASK API
 <img width="889" height="453" alt="Gemini_Generated_Image_776c72776c72776c" src="https://github.com/user-attachments/assets/b395e4d5-cd7b-47ef-84ac-c1e40816562c" />
 <img width="1630" height="821" alt="image" src="https://github.com/user-attachments/assets/f68ef089-a248-4366-9917-3ff75d1ddd19" />
 <img width="1908" height="893" alt="image" src="https://github.com/user-attachments/assets/98ac5950-eea7-4d78-b1da-5c66a9ddab82" />
+<img width="1312" height="725" alt="image" src="https://github.com/user-attachments/assets/d2db8493-7814-4e2b-ad13-88ae18e1ee21" />
+<img width="1847" height="838" alt="image" src="https://github.com/user-attachments/assets/a4dedfdf-30c7-44a1-9176-2d39c62c65a1" />
+<img width="1351" height="925" alt="Screenshot 2026-06-12 191137" src="https://github.com/user-attachments/assets/71cb9534-d0a0-4755-8e21-bd8bdc892935" />
+<img width="1920" height="1020" alt="Screenshot 2026-06-12 191100" src="https://github.com/user-attachments/assets/af518781-11ff-4ca3-bc8d-3c4420e6c41a" />
