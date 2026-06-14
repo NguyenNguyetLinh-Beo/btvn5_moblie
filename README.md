@@ -236,6 +236,7 @@ https://api.openweathermap.org/data/2.5/weather?q=ThaiNguyen&appid=APIKEY&units=
 ## BƯỚC 11: TEST API
  http://localhost:5000/api/latest
 ## BƯỚC 12: TẠO FRONTEND
+
 - index.html
 - script.js
   
@@ -283,11 +284,13 @@ Cứ mỗi 5 giây hệ thống sẽ tự động lấy dữ liệu thời tiế
 
 <img width="1880" height="978" alt="Screenshot 2026-06-12 193321" src="https://github.com/user-attachments/assets/761ad346-dba4-482f-a073-68fb86c0928a" />
 
+## BƯỚC 15: Cảnh báo hệ thống
+
 <img width="1351" height="925" alt="Screenshot 2026-06-12 191137" src="https://github.com/user-attachments/assets/71cb9534-d0a0-4755-8e21-bd8bdc892935" />
 
 <img width="1920" height="1020" alt="Screenshot 2026-06-12 191100" src="https://github.com/user-attachments/assets/af518781-11ff-4ca3-bc8d-3c4420e6c41a" />
 
-# 17. Kết quả đạt được
+# 16. Kết quả đạt được
 
 Sau quá trình nghiên cứu và triển khai, hệ thống đã hoàn thành đầy đủ các chức năng đề ra.
 
@@ -334,7 +337,7 @@ Sau quá trình nghiên cứu và triển khai, hệ thống đã hoàn thành �
 
 ---
 
-# 18. Hướng phát triển
+# 17. Hướng phát triển
 
 Trong tương lai hệ thống có thể được mở rộng theo các hướng:
 
@@ -372,7 +375,7 @@ Bổ sung:
 
 ---
 
-# 19. Kết luận
+# 18. Kết luận
 
 Qua quá trình thực hiện đề tài "Hệ thống giám sát thời tiết Real-Time và cảnh báo Telegram sử dụng Docker Compose", nhóm đã tìm hiểu và áp dụng thành công nhiều công nghệ hiện đại trong lĩnh vực phát triển và triển khai ứng dụng.
 
